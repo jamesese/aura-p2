@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AURA-P2 | NASA HUNCH Web Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #0b111e;
+      color: #e2e8f0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    .space-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    }
+    .space-card:hover {
+      border-color: rgba(56, 189, 248, 0.5);
+    }
+    .glow-cyan {
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header / Navigation -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-mx auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="bg-cyan-500/10 border border-cyan-500/30 p-2 rounded-lg text-cyan-400">
+          <i class="fa-solid font-bold fa-seedling text-xl"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg tracking-wider text-white">PROJECT AURA-P2</h1>
+          <p class="text-xs text-slate-400">NASA HUNCH Flight Hardware Telemetry & Crop Database</p>
+        </div>
+      </div>
+      <div class="text-right hidden sm:block">
+        <p class="text-xs font-semibold text-cyan-400">TEAM LEVI & JAMES</p>
+        <p class="text-xs text-slate-400">CDR Review Standard</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="bg-slate-900/60 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-4">
+      <button id="tab-telemetry" onclick="switchTab('telemetry')" class="py-3 px-4 font-medium text-sm border-b-2 border-cyan-400 text-cyan-400 flex items-center space-x-2 transition-all">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>AURA-P2 Telemetry & System Status</span>
+      </button>
+      <button id="tab-botanical" onclick="switchTab('botanical')" class="py-3 px-4 font-medium text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition-all">
+        <i class="fa-solid fa-plant-wilt"></i>
+        <span>Space Crop Botanical Database (Edible)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+
+    <!-- TAB 1: TELEMETRY (AURA-P2 Prototype Data) -->
+    <section id="content-telemetry" class="space-y-6">
+      
+      <!-- Live Status Indicators -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="space-card rounded-xl p-5">
+          <div class="flex justify-between items-center text-slate-400 text-sm">
+            <span>Soil Moisture</span>
+            <i class="fa-solid fa-droplet text-cyan-400"></i>
+          </div>
+          <div class="mt-2 flex items-baseline">
+            <span class="text-3xl font-bold text-white">52%</span>
+            <span class="ml-2 text-xs text-emerald-400 font-semibold">OPTIMAL (40-65%)</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Sensor: Capacitive Probe v1.2 (GPIO34)</p>
+        </div>
+
+        <div class="space-card rounded-xl p-5">
+          <div class="flex justify-between items-center text-slate-400 text-sm">
+            <span>Peristaltic Water Pump</span>
+            <i class="fa-solid fa-circle-nodes text-emerald-400"></i>
+          </div>
+          <div class="mt-2 flex items-baseline">
+            <span class="text-3xl font-bold text-white">IDLE</span>
+            <span class="ml-2 text-xs text-slate-400">SRD-05VDC Relay</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Control: GPIO26 | Rail: 12V DC</p>
+        </div>
+
+        <div class="space-card rounded-xl p-5">
+          <div class="flex justify-between items-center text-slate-400 text-sm">
+            <span>Air-Burst Pollination</span>
+            <i class="fa-solid fa-wind text-sky-400"></i>
+          </div>
+          <div class="mt-2 flex items-baseline">
+            <span class="text-3xl font-bold text-white">READY</span>
+            <span class="ml-2 text-xs text-sky-400 font-semibold">12H PULSE CYCLE</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">MOSFET PWM: GPIO27 | Micro Diaphragm</p>
+        </div>
+
+        <div class="space-card rounded-xl p-5">
+          <div class="flex justify-between items-center text-slate-400 text-sm">
+            <span>Power Logic Rail</span>
+            <i class="fa-solid fa-bolt text-amber-400"></i>
+          </div>
+          <div class="mt-2 flex items-baseline">
+            <span class="text-3xl font-bold text-white">5.01 V</span>
+            <span class="ml-2 text-xs text-emerald-400 font-semibold">STABLE</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">LM2596 Buck Converter (12V Input)</p>
+        </div>
+      </div>
+
+      <!-- System Architecture & Pin Mapping -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="space-card rounded-xl p-6">
+          <h2 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+            <i class="fa-solid fa-microchip text-cyan-400"></i>
+            <span>ESP32 Microcontroller Pin Mapping</span>
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-slate-300">
+              <thead class="text-xs uppercase bg-slate-900 text-cyan-400 border-b border-slate-800">
+                <tr>
+                  <th class="py-3 px-4">Component</th>
+                  <th class="py-3 px-4">Pinout</th>
+                  <th class="py-3 px-4">Voltage Rail</th>
+                  <th class="py-3 px-4">Function</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800">
+                <tr>
+                  <td class="py-3 px-4 font-semibold">Soil Moisture Probe</td>
+                  <td class="py-3 px-4 text-cyan-300">GPIO34 (Analog)</td>
+                  <td class="py-3 px-4">3.3V Logic</td>
+                  <td class="py-3 px-4">Root zone moisture sensing</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-semibold">Peristaltic Water Relay</td>
+                  <td class="py-3 px-4 text-cyan-300">GPIO26 (Digital)</td>
+                  <td class="py-3 px-4">5V Coil / 12V Load</td>
+                  <td class="py-3 px-4">Micro-dosing pump control</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-semibold">Pneumatic Air Pump PWM</td>
+                  <td class="py-3 px-4 text-cyan-300">GPIO27 (PWM)</td>
+                  <td class="py-3 px-4">5V Gate / 12V Load</td>
+                  <td class="py-3 px-4">Automated pollination airflow</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-semibold">Full-Spectrum LED Array</td>
+                  <td class="py-3 px-4 text-cyan-300">GPIO14 (PWM)</td>
+                  <td class="py-3 px-4">5V Gate / 12V Load</td>
+                  <td class="py-3 px-4">Photoperiod lighting control</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="space-card rounded-xl p-6">
+          <h2 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+            <i class="fa-solid fa-vial-circle-check text-emerald-400"></i>
+            <span>Microgravity Design Safeguards</span>
+          </h2>
+          <ul class="space-y-3 text-sm text-slate-300">
+            <li class="flex items-start space-x-3">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><strong>Flyback Diode Protection:</strong> 1N4001 diodes installed across inductive motor loads to prevent ESP32 micro-resets from voltage spikes.</span>
+            </li>
+            <li class="flex items-start space-x-3">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><strong>Backflow Prevention:</strong> Inline check valves and non-porous silicone tubing ensure fluid retention during microgravity pressure shifts.</span>
+            </li>
+            <li class="flex items-start space-x-3">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><strong>Collapsible Reservoir:</strong> 1L bladder prevents bubble vacuum formation without needing buoyancy-assisted intake.</span>
+            </li>
+            <li class="flex items-start space-x-3">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><strong>Targeted Airflow Pollination:</strong> Dual-zone canopy manifold agitates pollen directly, removing mechanical vibration failure points.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: BOTANICAL DATABASE (Edible Space Crops) -->
+    <section id="content-botanical" class="space-y-6 hidden">
+      
+      <!-- Filter Bar -->
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
+        <div class="relative w-full sm:w-80">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-500"></i>
+          <input type="text" id="cropSearch" onkeyup="filterCrops()" placeholder="Search edible crops (e.g. Tomato, Pepper)..." class="w-full bg-slate-950 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-cyan-400" />
+        </div>
+        <div class="flex space-x-2 w-full sm:w-auto overflow-x-auto">
+          <button onclick="filterCategory('all')" class="cat-btn bg-cyan-500 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-semibold">All Crops</button>
+          <button onclick="filterCategory('fruit')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold">Fruiting Crops</button>
+          <button onclick="filterCategory('greens')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold">Leafy Greens</button>
+          <button onclick="filterCategory('grain')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold">Grains/Roots</button>
+        </div>
+      </div>
+
+      <!-- Crops Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="cropsGrid">
+        
+        <!-- Crop 1 -->
+        <div class="crop-card space-card rounded-xl overflow-hidden" data-category="fruit" data-name="dwarf pepper space chili">
+          <div class="p-5">
+            <div class="flex justify-between items-start">
+              <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2.5 py-1 rounded-full font-semibold">Fruiting Crop</span>
+              <span class="text-xs text-slate-500">ID: SC-001</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-3">Dwarf Space Pepper</h3>
+            <p class="text-xs text-cyan-400 italic">Capsicum annuum 'Apachen'</p>
+            <div class="mt-4 space-y-2 text-xs text-slate-300">
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Target Moisture:</span>
+                <span class="font-semibold text-white">45% - 60%</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Pollination Method:</span>
+                <span class="font-semibold text-white">Air Burst Manifold</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Harvest Window:</span>
+                <span class="font-semibold text-white">65 - 80 Days</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
+              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-square-check mr-1"></i> AURA-P2 Compatible</span>
+              <span class="text-slate-
