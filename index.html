@@ -20,28 +20,21 @@
     .space-card:hover {
       border-color: rgba(56, 189, 248, 0.5);
     }
-    .glow-cyan {
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
   <!-- Header / Navigation -->
   <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-7xl mx-mx auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="bg-cyan-500/10 border border-cyan-500/30 p-2 rounded-lg text-cyan-400">
-          <i class="fa-solid font-bold fa-seedling text-xl"></i>
+          <i class="fa-solid fa-seedling text-xl"></i>
         </div>
         <div>
           <h1 class="font-bold text-lg tracking-wider text-white">PROJECT AURA-P2</h1>
           <p class="text-xs text-slate-400">NASA HUNCH Flight Hardware Telemetry & Crop Database</p>
         </div>
-      </div>
-      <div class="text-right hidden sm:block">
-        <p class="text-xs font-semibold text-cyan-400">TEAM LEVI & JAMES</p>
-        <p class="text-xs text-slate-400">CDR Review Standard</p>
       </div>
     </div>
   </header>
@@ -49,11 +42,11 @@
   <!-- Navigation Tabs -->
   <div class="bg-slate-900/60 border-b border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-4">
-      <button id="tab-telemetry" onclick="switchTab('telemetry')" class="py-3 px-4 font-medium text-sm border-b-2 border-cyan-400 text-cyan-400 flex items-center space-x-2 transition-all">
+      <button id="tab-telemetry" onclick="switchTab('telemetry')" class="py-3 px-4 font-medium text-sm border-b-2 border-cyan-400 text-cyan-400 flex items-center space-x-2 transition-all cursor-pointer">
         <i class="fa-solid fa-chart-line"></i>
         <span>AURA-P2 Telemetry & System Status</span>
       </button>
-      <button id="tab-botanical" onclick="switchTab('botanical')" class="py-3 px-4 font-medium text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition-all">
+      <button id="tab-botanical" onclick="switchTab('botanical')" class="py-3 px-4 font-medium text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition-all cursor-pointer">
         <i class="fa-solid fa-plant-wilt"></i>
         <span>Space Crop Botanical Database (Edible)</span>
       </button>
@@ -86,7 +79,7 @@
             <i class="fa-solid fa-circle-nodes text-emerald-400"></i>
           </div>
           <div class="mt-2 flex items-baseline">
-            <span class="text-3xl font-bold text-white">IDLE</span>
+            <span id="pump-status-text" class="text-3xl font-bold text-white">IDLE</span>
             <span class="ml-2 text-xs text-slate-400">SRD-05VDC Relay</span>
           </div>
           <p class="text-xs text-slate-500 mt-1">Control: GPIO26 | Rail: 12V DC</p>
@@ -98,7 +91,7 @@
             <i class="fa-solid fa-wind text-sky-400"></i>
           </div>
           <div class="mt-2 flex items-baseline">
-            <span class="text-3xl font-bold text-white">READY</span>
+            <span id="air-status-text" class="text-3xl font-bold text-white">READY</span>
             <span class="ml-2 text-xs text-sky-400 font-semibold">12H PULSE CYCLE</span>
           </div>
           <p class="text-xs text-slate-500 mt-1">MOSFET PWM: GPIO27 | Micro Diaphragm</p>
@@ -114,6 +107,34 @@
             <span class="ml-2 text-xs text-emerald-400 font-semibold">STABLE</span>
           </div>
           <p class="text-xs text-slate-500 mt-1">LM2596 Buck Converter (12V Input)</p>
+        </div>
+      </div>
+
+      <!-- Manual Hardware Override Controls -->
+      <div class="space-card rounded-xl p-6">
+        <h2 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+          <i class="fa-solid fa-sliders text-cyan-400"></i>
+          <span>Hardware Control & Manual Overrides</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-slate-900 p-4 rounded-lg border border-slate-800 flex items-center justify-between">
+            <div>
+              <p class="text-sm font-semibold text-white">Water Irrigation Pump</p>
+              <p class="text-xs text-slate-400">SRD-05VDC Relay (GPIO26)</p>
+            </div>
+            <button id="btn-pump" onclick="togglePump()" class="bg-cyan-500 text-slate-950 hover:bg-cyan-400 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">
+              TRIGGER DOSING
+            </button>
+          </div>
+          <div class="bg-slate-900 p-4 rounded-lg border border-slate-800 flex items-center justify-between">
+            <div>
+              <p class="text-sm font-semibold text-white">Pollination Air Manifold</p>
+              <p class="text-xs text-slate-400">MOSFET PWM Driver (GPIO27)</p>
+            </div>
+            <button id="btn-air" onclick="toggleAir()" class="bg-sky-500 text-slate-950 hover:bg-sky-400 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer">
+              PULSE AIRBURST
+            </button>
+          </div>
         </div>
       </div>
 
@@ -201,10 +222,10 @@
           <input type="text" id="cropSearch" onkeyup="filterCrops()" placeholder="Search edible crops (e.g. Tomato, Pepper)..." class="w-full bg-slate-950 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-cyan-400" />
         </div>
         <div class="flex space-x-2 w-full sm:w-auto overflow-x-auto">
-          <button onclick="filterCategory('all')" class="cat-btn bg-cyan-500 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-semibold">All Crops</button>
-          <button onclick="filterCategory('fruit')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold">Fruiting Crops</button>
-          <button onclick="filterCategory('greens')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold">Leafy Greens</button>
-          <button onclick="filterCategory('grain')" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold">Grains/Roots</button>
+          <button onclick="filterCategory('all', event)" class="cat-btn bg-cyan-500 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">All Crops</button>
+          <button onclick="filterCategory('fruit', event)" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">Fruiting Crops</button>
+          <button onclick="filterCategory('greens', event)" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">Leafy Greens</button>
+          <button onclick="filterCategory('grain', event)" class="cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">Grains/Roots</button>
         </div>
       </div>
 
@@ -236,4 +257,263 @@
             </div>
             <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
               <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-square-check mr-1"></i> AURA-P2 Compatible</span>
-              <span class="text-slate-
+              <span class="text-slate-400">High Vitamin C</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crop 2 -->
+        <div class="crop-card space-card rounded-xl overflow-hidden" data-category="fruit" data-name="micro-tom tomato dwarf">
+          <div class="p-5">
+            <div class="flex justify-between items-start">
+              <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2.5 py-1 rounded-full font-semibold">Fruiting Crop</span>
+              <span class="text-xs text-slate-500">ID: SC-002</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-3">Micro-Tom Tomato</h3>
+            <p class="text-xs text-cyan-400 italic">Solanum lycopersicum</p>
+            <div class="mt-4 space-y-2 text-xs text-slate-300">
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Target Moisture:</span>
+                <span class="font-semibold text-white">50% - 65%</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Pollination Method:</span>
+                <span class="font-semibold text-white">Air Burst Manifold</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Harvest Window:</span>
+                <span class="font-semibold text-white">70 - 85 Days</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
+              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-square-check mr-1"></i> NASA ISS Tested</span>
+              <span class="text-slate-400">Lycopene Rich</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crop 3 -->
+        <div class="crop-card space-card rounded-xl overflow-hidden" data-category="greens" data-name="outredgeous red romaine lettuce">
+          <div class="p-5">
+            <div class="flex justify-between items-start">
+              <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-1 rounded-full font-semibold">Leafy Greens</span>
+              <span class="text-xs text-slate-500">ID: SC-003</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-3">Red Romaine Lettuce</h3>
+            <p class="text-xs text-cyan-400 italic">Lactuca sativa 'Outredgeous'</p>
+            <div class="mt-4 space-y-2 text-xs text-slate-300">
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Target Moisture:</span>
+                <span class="font-semibold text-white">40% - 55%</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Pollination Method:</span>
+                <span class="font-semibold text-white">N/A (Vegetative)</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Harvest Window:</span>
+                <span class="font-semibold text-white">28 - 35 Days</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
+              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-square-check mr-1"></i> Veggie Habitat Flight</span>
+              <span class="text-slate-400">Antioxidant Dense</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crop 4 -->
+        <div class="crop-card space-card rounded-xl overflow-hidden" data-category="greens" data-name="mizuna mustard greens">
+          <div class="p-5">
+            <div class="flex justify-between items-start">
+              <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-1 rounded-full font-semibold">Leafy Greens</span>
+              <span class="text-xs text-slate-500">ID: SC-004</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-3">Mizuna Mustard Greens</h3>
+            <p class="text-xs text-cyan-400 italic">Brassica rapa var. nipposinica</p>
+            <div class="mt-4 space-y-2 text-xs text-slate-300">
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Target Moisture:</span>
+                <span class="font-semibold text-white">45% - 60%</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Pollination Method:</span>
+                <span class="font-semibold text-white">N/A (Vegetative)</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Harvest Window:</span>
+                <span class="font-semibold text-white">21 - 30 Days</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
+              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-square-check mr-1"></i> Fast Growth</span>
+              <span class="text-slate-400">Vitamin K & C</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crop 5 -->
+        <div class="crop-card space-card rounded-xl overflow-hidden" data-category="grain" data-name="apogee dwarf wheat grain">
+          <div class="p-5">
+            <div class="flex justify-between items-start">
+              <span class="bg-purple-500/10 text-purple-400 border border-purple-500/30 text-xs px-2.5 py-1 rounded-full font-semibold">Dwarf Grain</span>
+              <span class="text-xs text-slate-500">ID: SC-005</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-3">Apogee Dwarf Wheat</h3>
+            <p class="text-xs text-cyan-400 italic">Triticum aestivum 'Apogee'</p>
+            <div class="mt-4 space-y-2 text-xs text-slate-300">
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Target Moisture:</span>
+                <span class="font-semibold text-white">35% - 50%</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Pollination Method:</span>
+                <span class="font-semibold text-white">Pneumatic Air Burst</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Harvest Window:</span>
+                <span class="font-semibold text-white">55 - 65 Days</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
+              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-square-check mr-1"></i> High Calorie Density</span>
+              <span class="text-slate-400">Carbohydrate Source</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crop 6 -->
+        <div class="crop-card space-card rounded-xl overflow-hidden" data-category="grain" data-name="radish cherry belle root crop">
+          <div class="p-5">
+            <div class="flex justify-between items-start">
+              <span class="bg-purple-500/10 text-purple-400 border border-purple-500/30 text-xs px-2.5 py-1 rounded-full font-semibold">Root Crop</span>
+              <span class="text-xs text-slate-500">ID: SC-006</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-3">Cherry Belle Radish</h3>
+            <p class="text-xs text-cyan-400 italic">Raphanus sativus</p>
+            <div class="mt-4 space-y-2 text-xs text-slate-300">
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Target Moisture:</span>
+                <span class="font-semibold text-white">40% - 50%</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Pollination Method:</span>
+                <span class="font-semibold text-white">N/A (Root Crop)</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1">
+                <span class="text-slate-400">Harvest Window:</span>
+                <span class="font-semibold text-white">21 - 27 Days</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
+              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-square-check mr-1"></i> Rapid Turnaround</span>
+              <span class="text-slate-400">Micronutrients</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slate-950 py-6 text-center text-xs text-slate-500">
+    <p>AURA-P2 (Autonomous Under-gravity Resource & Agriculture) System</p>
+    <p class="mt-1">Developed for NASA HUNCH Critical Design Review (CDR)</p>
+  </footer>
+
+  <!-- JavaScript Logic -->
+  <script>
+    let pumpActive = false;
+    let airActive = false;
+
+    function switchTab(tabName) {
+      const telemetryTab = document.getElementById('tab-telemetry');
+      const botanicalTab = document.getElementById('tab-botanical');
+      const telemetryContent = document.getElementById('content-telemetry');
+      const botanicalContent = document.getElementById('content-botanical');
+
+      if (tabName === 'telemetry') {
+        telemetryTab.className = "py-3 px-4 font-medium text-sm border-b-2 border-cyan-400 text-cyan-400 flex items-center space-x-2 transition-all cursor-pointer";
+        botanicalTab.className = "py-3 px-4 font-medium text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition-all cursor-pointer";
+        telemetryContent.classList.remove('hidden');
+        botanicalContent.classList.add('hidden');
+      } else if (tabName === 'botanical') {
+        botanicalTab.className = "py-3 px-4 font-medium text-sm border-b-2 border-cyan-400 text-cyan-400 flex items-center space-x-2 transition-all cursor-pointer";
+        telemetryTab.className = "py-3 px-4 font-medium text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition-all cursor-pointer";
+        botanicalContent.classList.remove('hidden');
+        telemetryContent.classList.add('hidden');
+      }
+    }
+
+    function togglePump() {
+      const statusText = document.getElementById('pump-status-text');
+      const btn = document.getElementById('btn-pump');
+      
+      pumpActive = !pumpActive;
+      if (pumpActive) {
+        statusText.innerText = 'DOSING...';
+        statusText.className = 'text-3xl font-bold text-emerald-400 animate-pulse';
+        btn.innerText = 'STOP DOSING';
+        btn.className = 'bg-rose-500 text-white hover:bg-rose-400 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer';
+      } else {
+        statusText.innerText = 'IDLE';
+        statusText.className = 'text-3xl font-bold text-white';
+        btn.innerText = 'TRIGGER DOSING';
+        btn.className = 'bg-cyan-500 text-slate-950 hover:bg-cyan-400 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer';
+      }
+    }
+
+    function toggleAir() {
+      const statusText = document.getElementById('air-status-text');
+      const btn = document.getElementById('btn-air');
+      
+      airActive = !airActive;
+      if (airActive) {
+        statusText.innerText = 'PULSING...';
+        statusText.className = 'text-3xl font-bold text-sky-400 animate-pulse';
+        btn.innerText = 'STOP AIRBURST';
+        btn.className = 'bg-rose-500 text-white hover:bg-rose-400 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer';
+      } else {
+        statusText.innerText = 'READY';
+        statusText.className = 'text-3xl font-bold text-white';
+        btn.innerText = 'PULSE AIRBURST';
+        btn.className = 'bg-sky-500 text-slate-950 hover:bg-sky-400 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer';
+      }
+    }
+
+    function filterCrops() {
+      const input = document.getElementById('cropSearch').value.toLowerCase();
+      const cards = document.getElementsByClassName('crop-card');
+
+      for (let i = 0; i < cards.length; i++) {
+        const cropName = cards[i].getAttribute('data-name');
+        if (cropName.includes(input)) {
+          cards[i].style.display = "";
+        } else {
+          cards[i].style.display = "none";
+        }
+      }
+    }
+
+    function filterCategory(category, evt) {
+      const cards = document.getElementsByClassName('crop-card');
+      const btns = document.getElementsByClassName('cat-btn');
+
+      for (let btn of btns) {
+        btn.className = "cat-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer";
+      }
+      evt.target.className = "cat-btn bg-cyan-500 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer";
+
+      for (let i = 0; i < cards.length; i++) {
+        if (category === 'all' || cards[i].getAttribute('data-category') === category) {
+          cards[i].style.display = "";
+        } else {
+          cards[i].style.display = "none";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
