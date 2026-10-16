@@ -22,7 +22,7 @@
         </div>
         <div>
           <h1 class="font-bold text-lg tracking-wider text-white">PROJECT AURA-P2</h1>
-          <p class="text-xs text-slate-400">NASA HUNCH Flight Hardware Telemetry & Crop Database</p>
+          <p class="text-xs text-slate-400">NASA HUNCH Flight Hardware Telemetry & Data Logging</p>
         </div>
       </div>
     </div>
@@ -34,6 +34,10 @@
       <button id="tab-telemetry" onclick="switchTab('telemetry')" class="py-3 px-4 font-semibold text-sm border-b-2 border-cyan-400 text-cyan-400 flex items-center space-x-2 cursor-pointer">
         <i class="fa-solid fa-chart-line"></i>
         <span>AURA-P2 Telemetry & System Status</span>
+      </button>
+      <button id="tab-data" onclick="switchTab('data')" class="py-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 cursor-pointer">
+        <i class="fa-solid fa-database text-amber-400"></i>
+        <span>Data Logging Center</span>
       </button>
       <button id="tab-botanical" onclick="switchTab('botanical')" class="py-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 cursor-pointer">
         <i class="fa-solid fa-leaf"></i>
@@ -56,7 +60,7 @@
             <i class="fa-solid fa-droplet text-cyan-400"></i>
           </div>
           <div class="mt-2 flex items-baseline">
-            <span class="text-3xl font-bold text-white">52%</span>
+            <span id="live-moisture-val" class="text-3xl font-bold text-white">52%</span>
             <span id="target-range-display" class="ml-2 text-xs text-emerald-400 font-semibold">TARGET: 45-60%</span>
           </div>
           <p class="text-xs text-slate-500 mt-1">Capacitive Probe (GPIO34)</p>
@@ -214,12 +218,43 @@
 
     </div>
 
-    <!-- TAB 2: BOTANICAL DATABASE -->
+    <!-- TAB 2: DATA LOGGING CENTER -->
+    <div id="content-data" class="space-y-6 hidden">
+      <div class="space-card flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center space-x-2">
+            <i class="fa-solid fa-database text-amber-400"></i>
+            <span>Telemetry & System Event Log Center</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">Tracks hardware events, moisture threshold recalibrations, and manual overrides.</p>
+        </div>
+        <button onclick="recordManualSnapshot()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1.5 rounded text-xs cursor-pointer transition-all">
+          + Log Telemetry Snapshot
+        </button>
+      </div>
+
+      <div class="space-card overflow-x-auto">
+        <table class="w-full text-xs text-left text-slate-300">
+          <thead class="uppercase bg-slate-900 text-amber-400 border-b border-slate-800">
+            <tr>
+              <th class="py-3 px-4">Timestamp</th>
+              <th class="py-3 px-4">Event Type</th>
+              <th class="py-3 px-4">Active Crop</th>
+              <th class="py-3 px-4">Moisture</th>
+              <th class="py-3 px-4">Details</th>
+            </tr>
+          </thead>
+          <tbody id="data-log-tbody" class="divide-y divide-slate-800">
+            <!-- Dynamic Log Entries Inject Here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 3: BOTANICAL DATABASE -->
     <div id="content-botanical" class="space-y-6 hidden">
-      
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <!-- Crop 1 -->
         <div class="space-card">
           <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Fruiting Crop</span>
           <h3 class="text-base font-bold text-white mt-2">Dwarf Space Pepper</h3>
@@ -232,7 +267,6 @@
           <button onclick="selectCropFromDB('pepper')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
         </div>
 
-        <!-- Crop 2 -->
         <div class="space-card">
           <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Fruiting Crop</span>
           <h3 class="text-base font-bold text-white mt-2">Micro-Tom Tomato</h3>
@@ -245,7 +279,6 @@
           <button onclick="selectCropFromDB('tomato')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
         </div>
 
-        <!-- Crop 3 -->
         <div class="space-card">
           <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Leafy Greens</span>
           <h3 class="text-base font-bold text-white mt-2">Red Romaine Lettuce</h3>
@@ -258,7 +291,6 @@
           <button onclick="selectCropFromDB('lettuce')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
         </div>
 
-        <!-- Crop 4 -->
         <div class="space-card">
           <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Leafy Greens</span>
           <h3 class="text-base font-bold text-white mt-2">Mizuna Mustard Greens</h3>
@@ -271,7 +303,6 @@
           <button onclick="selectCropFromDB('mizuna')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
         </div>
 
-        <!-- Crop 5 -->
         <div class="space-card">
           <span class="bg-purple-500/10 text-purple-400 border border-purple-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Dwarf Grain</span>
           <h3 class="text-base font-bold text-white mt-2">Apogee Dwarf Wheat</h3>
@@ -284,7 +315,6 @@
           <button onclick="selectCropFromDB('wheat')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
         </div>
 
-        <!-- Crop 6 -->
         <div class="space-card">
           <span class="bg-purple-500/10 text-purple-400 border border-purple-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Root Crop</span>
           <h3 class="text-base font-bold text-white mt-2">Cherry Belle Radish</h3>
@@ -298,7 +328,6 @@
         </div>
 
       </div>
-
     </div>
 
   </main>
@@ -322,23 +351,61 @@
       radish: { name: 'Cherry Belle Radish', threshold: 40, duration: 2.5, target: 'TARGET: 40-50%', airCycle: 'DISABLED (ROOT)' }
     };
 
+    window.onload = function() {
+      logEvent('System Boot', 'Initial system status logged');
+    };
+
     function switchTab(tabName) {
       const telemetryTab = document.getElementById('tab-telemetry');
+      const dataTab = document.getElementById('tab-data');
       const botanicalTab = document.getElementById('tab-botanical');
+      
       const telemetryContent = document.getElementById('content-telemetry');
+      const dataContent = document.getElementById('content-data');
       const botanicalContent = document.getElementById('content-botanical');
+
+      // Reset all buttons
+      telemetryTab.className = "py-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 cursor-pointer";
+      dataTab.className = "py-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 cursor-pointer";
+      botanicalTab.className = "py-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 cursor-pointer";
+
+      // Hide all contents
+      telemetryContent.classList.add('hidden');
+      dataContent.classList.add('hidden');
+      botanicalContent.classList.add('hidden');
 
       if (tabName === 'telemetry') {
         telemetryTab.className = "py-3 px-4 font-semibold text-sm border-b-2 border-cyan-400 text-cyan-400 flex items-center space-x-2 cursor-pointer";
-        botanicalTab.className = "py-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 cursor-pointer";
         telemetryContent.classList.remove('hidden');
-        botanicalContent.classList.add('hidden');
-      } else {
+      } else if (tabName === 'data') {
+        dataTab.className = "py-3 px-4 font-semibold text-sm border-b-2 border-amber-400 text-amber-400 flex items-center space-x-2 cursor-pointer";
+        dataContent.classList.remove('hidden');
+      } else if (tabName === 'botanical') {
         botanicalTab.className = "py-3 px-4 font-semibold text-sm border-b-2 border-cyan-400 text-cyan-400 flex items-center space-x-2 cursor-pointer";
-        telemetryTab.className = "py-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 cursor-pointer";
         botanicalContent.classList.remove('hidden');
-        telemetryContent.classList.add('hidden');
       }
+    }
+
+    function logEvent(type, details) {
+      const timestamp = new Date().toLocaleTimeString();
+      const activeCrop = document.getElementById('active-plant-title').innerText;
+      const moisture = document.getElementById('live-moisture-val').innerText;
+
+      const tbody = document.getElementById('data-log-tbody');
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-slate-900 transition-all';
+      tr.innerHTML = `
+        <td class="py-2.5 px-4 font-mono text-cyan-300">${timestamp}</td>
+        <td class="py-2.5 px-4 font-bold text-white">${type}</td>
+        <td class="py-2.5 px-4">${activeCrop}</td>
+        <td class="py-2.5 px-4 text-emerald-400 font-semibold">${moisture}</td>
+        <td class="py-2.5 px-4 text-slate-400">${details}</td>
+      `;
+      tbody.prepend(tr);
+    }
+
+    function recordManualSnapshot() {
+      logEvent('Manual Snapshot', 'User recorded current system state');
     }
 
     function updatePumpSettings() {
@@ -358,6 +425,7 @@
       document.getElementById('thresholdSlider').value = preset.threshold;
       document.getElementById('durationSlider').value = preset.duration;
       updatePumpSettings();
+      logEvent('Crop Recalibration', 'System re-calibrated for ' + preset.name);
     }
 
     function selectCropFromDB(cropKey) {
@@ -375,11 +443,13 @@
         statusText.className = 'text-3xl font-bold text-emerald-400 animate-pulse';
         btn.innerText = 'STOP DOSING';
         btn.className = 'bg-rose-500 text-white font-bold px-4 py-2 rounded-lg text-xs cursor-pointer';
+        logEvent('Manual Override', 'Water Pump Triggered (Relay ON)');
       } else {
         statusText.innerText = 'IDLE';
         statusText.className = 'text-3xl font-bold text-white';
         btn.innerText = 'TRIGGER DOSING';
         btn.className = 'bg-cyan-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs cursor-pointer';
+        logEvent('Manual Override', 'Water Pump Stopped (Relay OFF)');
       }
     }
 
@@ -392,11 +462,13 @@
         statusText.className = 'text-3xl font-bold text-sky-400 animate-pulse';
         btn.innerText = 'STOP AIRBURST';
         btn.className = 'bg-rose-500 text-white font-bold px-4 py-2 rounded-lg text-xs cursor-pointer';
+        logEvent('Manual Override', 'Airburst Manifold Triggered (PWM Active)');
       } else {
         statusText.innerText = 'READY';
         statusText.className = 'text-3xl font-bold text-white';
         btn.innerText = 'PULSE AIRBURST';
         btn.className = 'bg-sky-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs cursor-pointer';
+        logEvent('Manual Override', 'Airburst Manifold Deactivated');
       }
     }
   </script>
