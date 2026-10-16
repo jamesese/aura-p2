@@ -41,7 +41,7 @@
       </button>
       <button id="tab-botanical" onclick="switchTab('botanical')" class="py-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 cursor-pointer">
         <i class="fa-solid fa-leaf"></i>
-        <span>Space Crop Botanical Database (Edible)</span>
+        <span>Small Food-Bearing Crop Database</span>
       </button>
     </div>
   </div>
@@ -60,8 +60,8 @@
             <i class="fa-solid fa-droplet text-cyan-400"></i>
           </div>
           <div class="mt-2 flex items-baseline">
-            <span id="live-moisture-val" class="text-3xl font-bold text-white">52%</span>
-            <span id="target-range-display" class="ml-2 text-xs text-emerald-400 font-semibold">TARGET: 45-60%</span>
+            <span id="live-moisture-val" class="text-3xl font-bold text-white">55%</span>
+            <span id="target-range-display" class="ml-2 text-xs text-emerald-400 font-semibold">TARGET: 50-65%</span>
           </div>
           <p class="text-xs text-slate-500 mt-1">Capacitive Probe (GPIO34)</p>
         </div>
@@ -96,7 +96,7 @@
             <i class="fa-solid fa-seedling text-emerald-400"></i>
           </div>
           <div class="mt-2 flex items-baseline">
-            <span id="active-plant-title" class="text-2xl font-bold text-cyan-400">Dwarf Pepper</span>
+            <span id="active-plant-title" class="text-2xl font-bold text-cyan-400">Alpine Strawberry</span>
           </div>
           <p class="text-xs text-slate-500 mt-1">Auto-Calibrated Target Active</p>
         </div>
@@ -113,12 +113,12 @@
             <p class="text-xs text-slate-400 mt-0.5">Selecting a crop automatically adjusts moisture thresholds and pollination schedules.</p>
           </div>
           <select id="plantPresetSelect" onchange="applyPlantPreset()" class="bg-slate-900 border border-cyan-500/50 text-cyan-300 font-semibold text-sm rounded-lg p-2 focus:outline-none cursor-pointer">
-            <option value="pepper">Dwarf Space Pepper (Capsicum annuum)</option>
-            <option value="tomato">Micro-Tom Tomato (Solanum lycopersicum)</option>
-            <option value="lettuce">Red Romaine Lettuce (Outredgeous)</option>
-            <option value="mizuna">Mizuna Mustard Greens (Brassica rapa)</option>
-            <option value="wheat">Apogee Dwarf Wheat (Triticum aestivum)</option>
-            <option value="radish">Cherry Belle Radish (Raphanus sativus)</option>
+            <option value="strawberry">Alpine Strawberries (Fragaria vesca)</option>
+            <option value="cherry_tomato">Dwarf Cherry Tomatoes (Tiny Tim)</option>
+            <option value="herbs">Container Herbs (Basil, Thyme, Mint)</option>
+            <option value="mini_pepper">Miniature Peppers (Pot-A-Peno)</option>
+            <option value="radish_lettuce">Radishes & Cut-and-Come-Again Greens</option>
+            <option value="bush_beans">Dwarf Bush Beans (Mascotte)</option>
           </select>
         </div>
       </div>
@@ -135,20 +135,20 @@
           <div>
             <div class="flex justify-between text-xs text-slate-300 mb-1">
               <span>Moisture Trigger Threshold:</span>
-              <span id="threshold-val" class="font-bold text-cyan-400">45%</span>
+              <span id="threshold-val" class="font-bold text-cyan-400">50%</span>
             </div>
-            <input type="range" id="thresholdSlider" min="20" max="70" value="45" oninput="updatePumpSettings()" class="w-full accent-cyan-400 cursor-pointer">
+            <input type="range" id="thresholdSlider" min="20" max="70" value="50" oninput="updatePumpSettings()" class="w-full accent-cyan-400 cursor-pointer">
           </div>
           <div>
             <div class="flex justify-between text-xs text-slate-300 mb-1">
               <span>Pump Dosing Duration:</span>
-              <span id="duration-val" class="font-bold text-cyan-400">3.5 Seconds</span>
+              <span id="duration-val" class="font-bold text-cyan-400">3.0 Seconds</span>
             </div>
-            <input type="range" id="durationSlider" min="1" max="10" step="0.5" value="3.5" oninput="updatePumpSettings()" class="w-full accent-cyan-400 cursor-pointer">
+            <input type="range" id="durationSlider" min="1" max="10" step="0.5" value="3.0" oninput="updatePumpSettings()" class="w-full accent-cyan-400 cursor-pointer">
           </div>
           <div class="pt-2 border-t border-slate-800 flex justify-between text-xs">
             <span class="text-slate-400">Calculated Flow Rate:</span>
-            <span id="flow-rate-val" class="font-bold text-emerald-400">12.2 mL / Cycle</span>
+            <span id="flow-rate-val" class="font-bold text-emerald-400">10.5 mL / Cycle</span>
           </div>
         </div>
 
@@ -256,75 +256,75 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         <div class="space-card">
-          <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Fruiting Crop</span>
-          <h3 class="text-base font-bold text-white mt-2">Dwarf Space Pepper</h3>
-          <p class="text-xs text-cyan-400 italic">Capsicum annuum 'Apachen'</p>
+          <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Compact Fruit</span>
+          <h3 class="text-base font-bold text-white mt-2">Strawberries (Alpine / Standard)</h3>
+          <p class="text-xs text-cyan-400 italic">Fragaria vesca</p>
           <div class="mt-3 space-y-1 text-xs text-slate-300 border-t border-slate-800 pt-2">
-            <p><strong>Target Moisture:</strong> 45% - 60%</p>
-            <p><strong>Pollination:</strong> Air Burst Manifold</p>
-            <p><strong>Harvest Window:</strong> 65 - 80 Days</p>
-          </div>
-          <button onclick="selectCropFromDB('pepper')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
-        </div>
-
-        <div class="space-card">
-          <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Fruiting Crop</span>
-          <h3 class="text-base font-bold text-white mt-2">Micro-Tom Tomato</h3>
-          <p class="text-xs text-cyan-400 italic">Solanum lycopersicum</p>
-          <div class="mt-3 space-y-1 text-xs text-slate-300 border-t border-slate-800 pt-2">
+            <p><strong>Container / Profile:</strong> 13 cm pots or vertical stackers (shallow root system).</p>
             <p><strong>Target Moisture:</strong> 50% - 65%</p>
-            <p><strong>Pollination:</strong> Air Burst Manifold</p>
-            <p><strong>Harvest Window:</strong> 70 - 85 Days</p>
+            <p><strong>Pollination:</strong> 12H Air Burst Pulse</p>
           </div>
-          <button onclick="selectCropFromDB('tomato')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
+          <button onclick="selectCropFromDB('strawberry')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
         </div>
 
         <div class="space-card">
-          <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Leafy Greens</span>
-          <h3 class="text-base font-bold text-white mt-2">Red Romaine Lettuce</h3>
-          <p class="text-xs text-cyan-400 italic">Lactuca sativa 'Outredgeous'</p>
+          <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Fruiting Crop</span>
+          <h3 class="text-base font-bold text-white mt-2">Dwarf Cherry Tomatoes</h3>
+          <p class="text-xs text-cyan-400 italic">Solanum lycopersicum ('Tiny Tim')</p>
           <div class="mt-3 space-y-1 text-xs text-slate-300 border-t border-slate-800 pt-2">
+            <p><strong>Container / Profile:</strong> 8-24 in. height; heavy yields in 12-14 in. pots.</p>
+            <p><strong>Target Moisture:</strong> 50% - 65%</p>
+            <p><strong>Pollination:</strong> 8H Air Burst Pulse</p>
+          </div>
+          <button onclick="selectCropFromDB('cherry_tomato')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
+        </div>
+
+        <div class="space-card">
+          <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Flavor Herbs</span>
+          <h3 class="text-base font-bold text-white mt-2">Herbs (Basil, Thyme, Chives, Mint)</h3>
+          <p class="text-xs text-cyan-400 italic">Ocimum basilicum / Thymus vulgaris</p>
+          <div class="mt-3 space-y-1 text-xs text-slate-300 border-t border-slate-800 pt-2">
+            <p><strong>Container / Profile:</strong> Tiny footprint; ideal for windowsills and balconies.</p>
             <p><strong>Target Moisture:</strong> 40% - 55%</p>
-            <p><strong>Pollination:</strong> N/A (Vegetative)</p>
-            <p><strong>Harvest Window:</strong> 28 - 35 Days</p>
+            <p><strong>Pollination:</strong> N/A (Vegetative Harvest)</p>
           </div>
-          <button onclick="selectCropFromDB('lettuce')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
+          <button onclick="selectCropFromDB('herbs')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
         </div>
 
         <div class="space-card">
-          <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Leafy Greens</span>
-          <h3 class="text-base font-bold text-white mt-2">Mizuna Mustard Greens</h3>
-          <p class="text-xs text-cyan-400 italic">Brassica rapa var. nipposinica</p>
+          <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Fruiting Crop</span>
+          <h3 class="text-base font-bold text-white mt-2">Miniature Peppers</h3>
+          <p class="text-xs text-cyan-400 italic">Capsicum annuum ('Pot-A-Peno' / 'Quickfire')</p>
           <div class="mt-3 space-y-1 text-xs text-slate-300 border-t border-slate-800 pt-2">
+            <p><strong>Container / Profile:</strong> Highly compact; thrives in small containers under full sun.</p>
             <p><strong>Target Moisture:</strong> 45% - 60%</p>
-            <p><strong>Pollination:</strong> N/A (Vegetative)</p>
-            <p><strong>Harvest Window:</strong> 21 - 30 Days</p>
+            <p><strong>Pollination:</strong> 12H Air Burst Pulse</p>
           </div>
-          <button onclick="selectCropFromDB('mizuna')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
+          <button onclick="selectCropFromDB('mini_pepper')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
         </div>
 
         <div class="space-card">
-          <span class="bg-purple-500/10 text-purple-400 border border-purple-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Dwarf Grain</span>
-          <h3 class="text-base font-bold text-white mt-2">Apogee Dwarf Wheat</h3>
-          <p class="text-xs text-cyan-400 italic">Triticum aestivum 'Apogee'</p>
+          <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Fast Greens & Roots</span>
+          <h3 class="text-base font-bold text-white mt-2">Radishes & Leaf Lettuce</h3>
+          <p class="text-xs text-cyan-400 italic">Raphanus sativus / Lactuca sativa</p>
           <div class="mt-3 space-y-1 text-xs text-slate-300 border-t border-slate-800 pt-2">
-            <p><strong>Target Moisture:</strong> 35% - 50%</p>
-            <p><strong>Pollination:</strong> Pneumatic Air Burst</p>
-            <p><strong>Harvest Window:</strong> 55 - 65 Days</p>
-          </div>
-          <button onclick="selectCropFromDB('wheat')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
-        </div>
-
-        <div class="space-card">
-          <span class="bg-purple-500/10 text-purple-400 border border-purple-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Root Crop</span>
-          <h3 class="text-base font-bold text-white mt-2">Cherry Belle Radish</h3>
-          <p class="text-xs text-cyan-400 italic">Raphanus sativus</p>
-          <div class="mt-3 space-y-1 text-xs text-slate-300 border-t border-slate-800 pt-2">
+            <p><strong>Container / Profile:</strong> Fast maturing in minimal soil depth; cut-and-come-again.</p>
             <p><strong>Target Moisture:</strong> 40% - 50%</p>
-            <p><strong>Pollination:</strong> N/A (Root Crop)</p>
-            <p><strong>Harvest Window:</strong> 21 - 27 Days</p>
+            <p><strong>Pollination:</strong> N/A (Root / Leaf Harvest)</p>
           </div>
-          <button onclick="selectCropFromDB('radish')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
+          <button onclick="selectCropFromDB('radish_lettuce')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
+        </div>
+
+        <div class="space-card">
+          <span class="bg-purple-500/10 text-purple-400 border border-purple-500/30 text-xs px-2 py-0.5 rounded-full font-semibold">Compact Legume</span>
+          <h3 class="text-base font-bold text-white mt-2">Dwarf Bush Beans</h3>
+          <p class="text-xs text-cyan-400 italic">Phaseolus vulgaris ('Mascotte')</p>
+          <div class="mt-3 space-y-1 text-xs text-slate-300 border-t border-slate-800 pt-2">
+            <p><strong>Container / Profile:</strong> Heavy pod production in tight spaces without sprawling.</p>
+            <p><strong>Target Moisture:</strong> 45% - 55%</p>
+            <p><strong>Pollination:</strong> 24H Air Burst Pulse</p>
+          </div>
+          <button onclick="selectCropFromDB('bush_beans')" class="mt-3 w-full bg-cyan-500 text-slate-950 font-bold py-1.5 rounded text-xs cursor-pointer">Select & Calibrate Prototype</button>
         </div>
 
       </div>
@@ -343,12 +343,12 @@
     let airActive = false;
 
     const plantPresets = {
-      pepper: { name: 'Dwarf Space Pepper', threshold: 45, duration: 3.5, target: 'TARGET: 45-60%', airCycle: '12H PULSE' },
-      tomato: { name: 'Micro-Tom Tomato', threshold: 50, duration: 4.0, target: 'TARGET: 50-65%', airCycle: '8H PULSE' },
-      lettuce: { name: 'Red Romaine Lettuce', threshold: 40, duration: 2.5, target: 'TARGET: 40-55%', airCycle: 'DISABLED (VEG)' },
-      mizuna: { name: 'Mizuna Mustard Greens', threshold: 45, duration: 3.0, target: 'TARGET: 45-60%', airCycle: 'DISABLED (VEG)' },
-      wheat: { name: 'Apogee Dwarf Wheat', threshold: 35, duration: 2.0, target: 'TARGET: 35-50%', airCycle: '24H PULSE' },
-      radish: { name: 'Cherry Belle Radish', threshold: 40, duration: 2.5, target: 'TARGET: 40-50%', airCycle: 'DISABLED (ROOT)' }
+      strawberry: { name: 'Alpine Strawberries', threshold: 50, duration: 3.0, target: 'TARGET: 50-65%', airCycle: '12H PULSE' },
+      cherry_tomato: { name: 'Dwarf Cherry Tomatoes', threshold: 50, duration: 4.0, target: 'TARGET: 50-65%', airCycle: '8H PULSE' },
+      herbs: { name: 'Container Herbs', threshold: 40, duration: 2.0, target: 'TARGET: 40-55%', airCycle: 'DISABLED (VEG)' },
+      mini_pepper: { name: 'Miniature Peppers', threshold: 45, duration: 3.5, target: 'TARGET: 45-60%', airCycle: '12H PULSE' },
+      radish_lettuce: { name: 'Radishes & Leaf Lettuce', threshold: 40, duration: 2.5, target: 'TARGET: 40-50%', airCycle: 'DISABLED (ROOT/GREENS)' },
+      bush_beans: { name: 'Dwarf Bush Beans', threshold: 45, duration: 3.0, target: 'TARGET: 45-55%', airCycle: '24H PULSE' }
     };
 
     window.onload = function() {
